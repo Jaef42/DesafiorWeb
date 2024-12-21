@@ -8,7 +8,7 @@ const router = express.Router();
 
 // Create
 router.post('/', async (req, res) => {
-    const { nombre_usuario, nombre_categoria, nombre, marca, codigo, stock, nombre_estado, precio, fecha_creacion, foto } = req.body;
+    const { nombre_usuario, nombre_categoria, nombre, marca, codigo, stock, nombre_estado, precio, foto } = req.body;
     try {
         const usuario = await User.findOne({ where: { nombre_completo: nombre_usuario } });
         const categoria = await Category.findOne({ where: { nombre: nombre_categoria } });
@@ -27,7 +27,6 @@ router.post('/', async (req, res) => {
             stock,
             estados_idEstados: estado.idEstados,
             precio,
-            fecha_creacion,
             foto,
         });
         res.status(201).json(newProducto);
@@ -68,7 +67,7 @@ router.get('/search', async (req, res) => {
 // Actualizar
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { nombre_usuario, nombre_categoria, nombre, marca, codigo, stock, nombre_estado, precio, fecha_creacion, foto } = req.body;
+    const { nombre_usuario, nombre_categoria, nombre, marca, codigo, stock, nombre_estado, precio, foto } = req.body;
 
     try {
         const usuario = await User.findOne({ where: { nombre_completo: nombre_usuario } });
@@ -93,8 +92,7 @@ router.put('/:id', async (req, res) => {
             stock,
             estados_idEstados: estado.idEstados,
             precio,
-            fecha_creacion,
-            foto,
+            foto: foto || null,
         });
         res.status(200).json(product);
     } catch (error) {
@@ -102,19 +100,17 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Eliminar
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const product = await Product.findByPk(id);
-        if (!product) {
-            return res.status(404).json({ error: 'Producto no encontrado' });
-        }
-        await product.destroy();
-        res.status(204).json();
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
+//Inactivar Producto
+router.put('/:id/inactivar', async (req, res) => { 
+    const { id } = req.params; const { idEstado } = req.body; 
+    try { 
+        await sequelize.query('EXEC InactivarProducto :p_idEstado, :p_idProducto', { 
+            replacements: { 
+                p_idEstado: idEstado, p_idProducto: id 
+            } 
+        }); 
+        res.status(200).json({ message: 'Producto inactivado exitosamente' }); 
+    } catch (error) { res.status(400).json({ error: error.message }); } }); 
 
+///////
 export default router;
