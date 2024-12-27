@@ -1,47 +1,72 @@
 
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Índice de Proyecto</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f0f0f0;
-                text-align: center;
-                margin: 0;
-                padding: 20px;
-            }
-            ul {
-                list-style-type: none;
-                padding: 0;
-            }
-            li {
-                padding: 8px;
-            }
-            a {
-                text-decoration: none;
-                color: #333;
-            }
-            a:hover {
-                text-decoration: underline;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Índice de Proyecto</h1>
-        <ul>
-    <li><a href="./.env">.env</a></li>
-<li><a href="./.git/">.git/</a></li>
-<li><a href="./.gitignore">.gitignore</a></li>
-<li><a href="./generate-index.js">generate-index.js</a></li>
-<!-- <li><a href="./node_modules/">node_modules/</a></li> -->
-<li><a href="./package-lock.json">package-lock.json</a></li>
-<li><a href="./package.json">package.json</a></li>
-<li><a href="./src/">src/</a></li>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Índice de Proyecto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 8px;
+        }
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Índice de Proyecto</h1>
+<ul>
+<li><a href="./app.js">app.js</a></li>
+<li><a href="./config/">config/</a></li>
+<ul>
+<li><a href="./config\db.js">db.js</a></li>
+</ul>
+<li><a href="./controllers/">controllers/</a></li>
+<ul>
+<li><a href="./controllers\usuarioController.js">usuarioController.js</a></li>
+</ul>
+<li><a href="./middlewares/">middlewares/</a></li>
+<ul>
+<li><a href="./middlewares\authMiddleware.js">authMiddleware.js</a></li>
+</ul>
+<li><a href="./models/">models/</a></li>
+<ul>
+<li><a href="./models\categoriaModel.js">categoriaModel.js</a></li>
+<li><a href="./models\clienteModel.js">clienteModel.js</a></li>
+<li><a href="./models\estadoModel.js">estadoModel.js</a></li>
+<li><a href="./models\index.js">index.js</a></li>
+<li><a href="./models\ordenDetalleModel.js">ordenDetalleModel.js</a></li>
+<li><a href="./models\ordenModel.js">ordenModel.js</a></li>
+<li><a href="./models\productoModel.js">productoModel.js</a></li>
+<li><a href="./models\usuarioModel.js">usuarioModel.js</a></li>
+</ul>
+<li><a href="./routes/">routes/</a></li>
+<ul>
+<li><a href="./routes\categoriaRoute.js">categoriaRoute.js</a></li>
+<li><a href="./routes\clienteRoute.js">clienteRoute.js</a></li>
+<li><a href="./routes\estadoRoute.js">estadoRoute.js</a></li>
+<li><a href="./routes\ordenDetalleRoute.js">ordenDetalleRoute.js</a></li>
+<li><a href="./routes\ordenRoute.js">ordenRoute.js</a></li>
+<li><a href="./routes\productoRoute.js">productoRoute.js</a></li>
+<li><a href="./routes\usuarioRoute.js">usuarioRoute.js</a></li>
+</ul>
+</ul>
 
-        </ul>
-    </body>
-    </html>
-    
+</body>
+</html>
