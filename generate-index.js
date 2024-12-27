@@ -1,4 +1,14 @@
+import { readdir, writeFileSync, lstatSync } from 'fs';
+import { join } from 'path';
 
+const directoryPath = join('.', '.');
+
+readdir(directoryPath, function (err, files) {
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    }
+
+    let content = `
     <!DOCTYPE html>
     <html lang="es">
     <head>
@@ -32,16 +42,24 @@
     <body>
         <h1>Índice de Proyecto</h1>
         <ul>
-    <li><a href="./.env">.env</a></li>
-<li><a href="./.git/">.git/</a></li>
-<li><a href="./.gitignore">.gitignore</a></li>
-<li><a href="./generate-index.js">generate-index.js</a></li>
-<!-- <li><a href="./node_modules/">node_modules/</a></li> -->
-<li><a href="./package-lock.json">package-lock.json</a></li>
-<li><a href="./package.json">package.json</a></li>
-<li><a href="./src/">src/</a></li>
+    `;
 
+    files.forEach(function (file) {
+        const filePath = join(directoryPath, file);
+        const isDirectory = lstatSync(filePath).isDirectory();
+
+        if (isDirectory) {
+            content += `<li><a href="./${file}/">${file}/</a></li>\n`;
+        } else {
+            content += `<li><a href="./${file}">${file}</a></li>\n`;
+        }
+    });
+
+    content += `
         </ul>
     </body>
     </html>
-    
+    `;
+
+    writeFileSync('index.html', content);
+});
