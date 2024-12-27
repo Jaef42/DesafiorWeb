@@ -27,45 +27,1117 @@
         a:hover {
             text-decoration: underline;
         }
+        pre {
+            text-align: left;
+            background-color: #e0e0e0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
     </style>
 </head>
 <body>
     <h1>Índice de Proyecto</h1>
 <ul>
-<li><a href="./app.js">app.js</a></li>
-<li><a href="./config/">config/</a></li>
+<li><a href="#app.js">app.js</a></li>
+
+                <div id="app.js">
+                    <h3>app.js</h3>
+                    <pre><code>import express from &#039;express&#039;;
+import sequelize from &#039;../src/config/db.js&#039;;
+import userRouter from &#039;../src/routes/usuarioRoute.js&#039;;
+import productRouter from &#039;./routes/productoRoute.js&#039;;
+import stateRouter from &#039;./routes/estadoRoute.js&#039;;
+import categoryRouter from &#039;./routes/categoriaRoute.js&#039;;
+import clienteRouter from &#039;./routes/clienteRoute.js&#039;;
+import orderRoute from &#039;./routes/ordenRoute.js&#039;;
+import orderDetailRoute from &#039;./routes/ordenDetalleRoute.js&#039;;
+import cors from &#039;cors&#039;;
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+app.use(&#039;/api/users&#039;, userRouter);
+app.use(&#039;/api/products&#039;, productRouter);
+app.use(&#039;/api/states&#039;, stateRouter);
+app.use(&#039;/api/categories&#039;, categoryRouter);
+app.use(&#039;/api/clients&#039;, clienteRouter);
+app.use(&#039;/api/orders&#039;, orderRoute);
+app.use(&#039;/api/order-details&#039;, orderDetailRoute);
+
+app.listen(PORT, async () =&gt; {
+    try {
+        await sequelize.authenticate();
+        console.log(&#039;Conexión con la base de datos establecida correctamente.&#039;);
+    } catch (error) {
+        console.error(&#039;No se pudo conectar a la base de datos:&#039;, error);
+    }
+    console.log(`Servidor ejecutándose en el puerto ${PORT}`);
+});
+
+document.addEventListener(&#039;DOMContentLoaded&#039;, () =&gt; { 
+    const mensaje = document.getElementById(&#039;mensaje&#039;); 
+    mensaje.textContent = &#039;Bienvenido a mi proyecto JavaScript en GitHub Pages!&#039;; });</code></pre>
+                </div>
+                <li><a href="#config">config/</a></li>
 <ul>
-<li><a href="./config\db.js">db.js</a></li>
-</ul>
-<li><a href="./controllers/">controllers/</a></li>
+<li><a href="#config\db.js">db.js</a></li>
+
+                <div id="config\db.js">
+                    <h3>db.js</h3>
+                    <pre><code>import { Sequelize } from &quot;sequelize&quot;;
+
+const sequelize = new Sequelize({
+    dialect: &#039;mssql&#039;,
+    host: &#039;localhost&#039;,
+    username: &#039;JavierEcheverria&#039;,
+    password: &#039;123456&#039;,
+    database: &#039;GDA0053OT-JavierEcheverria&#039;,
+    server: &#039;SARAIDEAPAD3&#039;,
+    dialectOptions: {
+        trustServerCertificate: true,
+        timezone: &#039;America/Guatemala&#039;
+    }
+});
+
+export default sequelize;
+
+</code></pre>
+                </div>
+                </ul>
+<li><a href="#controllers">controllers/</a></li>
 <ul>
-<li><a href="./controllers\usuarioController.js">usuarioController.js</a></li>
-</ul>
-<li><a href="./middlewares/">middlewares/</a></li>
+<li><a href="#controllers\usuarioController.js">usuarioController.js</a></li>
+
+                <div id="controllers\usuarioController.js">
+                    <h3>usuarioController.js</h3>
+                    <pre><code></code></pre>
+                </div>
+                </ul>
+<li><a href="#middlewares">middlewares/</a></li>
 <ul>
-<li><a href="./middlewares\authMiddleware.js">authMiddleware.js</a></li>
-</ul>
-<li><a href="./models/">models/</a></li>
+<li><a href="#middlewares\authMiddleware.js">authMiddleware.js</a></li>
+
+                <div id="middlewares\authMiddleware.js">
+                    <h3>authMiddleware.js</h3>
+                    <pre><code>import jwt from &#039;jsonwebtoken&#039;;
+
+const authMiddleware = (req, res, next) =&gt; {
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+        const token = authHeader.split(&#039; &#039;)[1];
+        jwt.verify(token, &#039;your_secret_key&#039;, (err, user) =&gt; {
+            if (err) {
+                return res.sendStatus(403);
+            }
+            req.user = user;
+            next();
+        });
+    } else {
+        res.sendStatus(401);
+    }
+};
+
+export default authMiddleware;
+</code></pre>
+                </div>
+                </ul>
+<li><a href="#models">models/</a></li>
 <ul>
-<li><a href="./models\categoriaModel.js">categoriaModel.js</a></li>
-<li><a href="./models\clienteModel.js">clienteModel.js</a></li>
-<li><a href="./models\estadoModel.js">estadoModel.js</a></li>
-<li><a href="./models\index.js">index.js</a></li>
-<li><a href="./models\ordenDetalleModel.js">ordenDetalleModel.js</a></li>
-<li><a href="./models\ordenModel.js">ordenModel.js</a></li>
-<li><a href="./models\productoModel.js">productoModel.js</a></li>
-<li><a href="./models\usuarioModel.js">usuarioModel.js</a></li>
-</ul>
-<li><a href="./routes/">routes/</a></li>
+<li><a href="#models\categoriaModel.js">categoriaModel.js</a></li>
+
+                <div id="models\categoriaModel.js">
+                    <h3>categoriaModel.js</h3>
+                    <pre><code>import { DataTypes } from &#039;sequelize&#039;;
+import sequelize from &#039;../config/db.js&#039;;
+
+const Category = sequelize.define(&#039;Category&#039;, {
+    idCategoriaProductos: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    nombre: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    usuarios_idUsuarios: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    estados_idEstados: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    fecha_creacion: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    }
+}, {
+    tableName: &#039;CategoriaProductos&#039;,
+    timestamps: false,
+});
+
+export default Category;
+</code></pre>
+                </div>
+                <li><a href="#models\clienteModel.js">clienteModel.js</a></li>
+
+                <div id="models\clienteModel.js">
+                    <h3>clienteModel.js</h3>
+                    <pre><code>import { DataTypes } from &#039;sequelize&#039;;
+import sequelize from &#039;../config/db.js&#039;;
+
+const Cliente = sequelize.define(&#039;Cliente&#039;, {
+    idCliente: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    razon_social: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    nombre_comercial: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    direccion_entrega: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    telefono: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
+}, {
+    tableName: &#039;Clientes&#039;,
+    timestamps: false,
+});
+
+export default Cliente;
+</code></pre>
+                </div>
+                <li><a href="#models\estadoModel.js">estadoModel.js</a></li>
+
+                <div id="models\estadoModel.js">
+                    <h3>estadoModel.js</h3>
+                    <pre><code>import { DataTypes } from &quot;sequelize&quot;;
+import sequelize from &quot;../config/db.js&quot;;
+
+const State = sequelize.define(&#039;State&#039;, {
+    idEstados: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    nombre: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
+},{
+    tableName: &#039;Estados&#039;,
+    timestamps: false,
+});
+
+export default State;</code></pre>
+                </div>
+                <li><a href="#models\index.js">index.js</a></li>
+
+                <div id="models\index.js">
+                    <h3>index.js</h3>
+                    <pre><code></code></pre>
+                </div>
+                <li><a href="#models\ordenDetalleModel.js">ordenDetalleModel.js</a></li>
+
+                <div id="models\ordenDetalleModel.js">
+                    <h3>ordenDetalleModel.js</h3>
+                    <pre><code>import { DataTypes } from &quot;sequelize&quot;;
+import sequelize from &quot;../config/db.js&quot;;
+
+const OrderDetail = sequelize.define(&#039;OrderDetail&#039;, {
+    idOrdenDetalle: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    orden_idOrden: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    Productos_idProductos: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    cantidad: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    precio: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    subtotal: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    }
+}, {
+    tableName: &#039;OrdenDetalles&#039;,
+    timestamps: false,
+});
+
+export default OrderDetail;
+</code></pre>
+                </div>
+                <li><a href="#models\ordenModel.js">ordenModel.js</a></li>
+
+                <div id="models\ordenModel.js">
+                    <h3>ordenModel.js</h3>
+                    <pre><code>import { DataTypes } from &quot;sequelize&quot;;
+import sequelize from &quot;../config/db.js&quot;;
+
+const Order = sequelize.define(&#039;Order&#039;, {
+    idOrden: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    usuarios_idUsuarios: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    estados_idEstados: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    fecha_creacion: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+    nombre_completo: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    direccion: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    telefono: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    correo_electronico: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    fecha_entrega: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    total_orden: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    detalles_json: {
+        type: DataTypes.TEXT,  // Campo para almacenar los detalles en formato JSON
+        allowNull: false,
+    }
+}, {
+    tableName: &#039;Orden&#039;,
+    timestamps: false,
+});
+
+export default Order;
+</code></pre>
+                </div>
+                <li><a href="#models\productoModel.js">productoModel.js</a></li>
+
+                <div id="models\productoModel.js">
+                    <h3>productoModel.js</h3>
+                    <pre><code>import { DataTypes } from &quot;sequelize&quot;;
+import sequelize from &quot;../config/db.js&quot;;
+
+const Product = sequelize.define(&#039;Product&#039; , {
+    idProducto: {
+        type:DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    categoriaProductos_idCategoriaProductos: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    usuarios_idUsuarios: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    nombre: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    marca: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    codigo: {
+        type:DataTypes.STRING,
+        allowNull: false,
+    },
+    stock:{
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    estados_idEstados: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    precio: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    fecha_creacion:{
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+    foto: {
+        type: DataTypes.BLOB,
+        allowNull: true,
+     } 
+}, {
+    tableName: &#039;Productos&#039;,
+    timestamps: false,
+    
+});
+
+export default Product;</code></pre>
+                </div>
+                <li><a href="#models\usuarioModel.js">usuarioModel.js</a></li>
+
+                <div id="models\usuarioModel.js">
+                    <h3>usuarioModel.js</h3>
+                    <pre><code>import { DataTypes } from &#039;sequelize&#039;;
+import sequelize from &#039;../config/db.js&#039;
+
+const User = sequelize.define(&#039;User&#039;, {
+    idUsuarios: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    correo_electronico: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    nombre_completo: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    telefono: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    fecha_nacimiento: {
+        type: DataTypes.DATE,
+    },
+    fecha_creacion: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    }
+}, {
+    tableName: &#039;Usuarios&#039;,
+    timestamps: false,
+});
+
+export default User;
+</code></pre>
+                </div>
+                </ul>
+<li><a href="#routes">routes/</a></li>
 <ul>
-<li><a href="./routes\categoriaRoute.js">categoriaRoute.js</a></li>
-<li><a href="./routes\clienteRoute.js">clienteRoute.js</a></li>
-<li><a href="./routes\estadoRoute.js">estadoRoute.js</a></li>
-<li><a href="./routes\ordenDetalleRoute.js">ordenDetalleRoute.js</a></li>
-<li><a href="./routes\ordenRoute.js">ordenRoute.js</a></li>
-<li><a href="./routes\productoRoute.js">productoRoute.js</a></li>
-<li><a href="./routes\usuarioRoute.js">usuarioRoute.js</a></li>
-</ul>
+<li><a href="#routes\categoriaRoute.js">categoriaRoute.js</a></li>
+
+                <div id="routes\categoriaRoute.js">
+                    <h3>categoriaRoute.js</h3>
+                    <pre><code>import express from &#039;express&#039;;
+import Category from &#039;../models/categoriaModel.js&#039;;
+import State from &#039;../models/estadoModel.js&#039;;
+import User from &#039;../models/usuarioModel.js&#039;;
+
+const router = express.Router();
+
+//Crear Categoria
+router.post(&#039;/&#039;, async (req, res) =&gt; {
+    const { nombre_usuario, nombre, nombre_estado } = req.body
+    try {
+        const usuario = await User.findOne({ where: { nombre_completo: nombre_usuario } });
+        const estado = await State.findOne({ where: { nombre: nombre_estado } });
+
+        if (!usuario || !estado) {
+            return res.status(400).json({ error: &quot;Usuario o estado no encotrados&quot; })
+        }
+
+        const newCategory = await Category.create({
+            usuarios_idUsuarios: usuario.idUsuarios,
+            nombre,
+            estados_idEstados: estado.idEstados,
+         
+        });
+        res.status(201).json(newCategory);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+
+    }
+});
+
+
+//Obtener todas las Categorias
+
+router.get(&#039;/&#039;, async (req, res) =&gt; {
+    try {
+        const categorias = await Category.findAll();
+        res.status(200).json(categorias)
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+
+    }
+});
+
+//Actualizar
+router.put(&#039;/actualizar&#039;, async (req, res) =&gt; {
+    const { nombre_categoria, nombre_usuario, nuevo_nombre, nombre_estado } = req.body;
+    try {
+        const usuario = await User.findOne({ where: { nombre_completo: nombre_usuario } });
+        const estado = await State.findOne({ where: { nombre: nombre_estado } });
+
+        if (!usuario || !estado) {
+            return res.status(400).json({ error: &#039;Usuario o estado no encontrados&#039; });
+        }
+
+        const categoria = await Category.findOne({ where: { nombre: nombre_categoria } });
+        if (!categoria) {
+            return res.status(400).json({ error: &#039;Categoria no encontrada&#039; })
+        }
+
+        await categoria.update({
+            usuario_idUsuarios: usuario.idUsuarios,
+            nombre: nuevo_nombre,
+            estados_idEstados: estado.idEstados,
+           
+
+        });
+        res.status(200).json(categoria);
+
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+
+    }
+});
+
+// Eliminar 
+router.delete(&#039;/delete&#039;, async (req, res) =&gt; {
+    const { nombre_categoria } = req.body;
+    try {
+        const category = await Category.findOne({ where: { nombre: nombre_categoria } });
+        if (!category) {
+            return res.status(404).json({
+                error: &#039;Categoría no encontrada&#039;
+
+            });
+        }
+        await category.destroy(); res.status(204).json();
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+export default router;</code></pre>
+                </div>
+                <li><a href="#routes\clienteRoute.js">clienteRoute.js</a></li>
+
+                <div id="routes\clienteRoute.js">
+                    <h3>clienteRoute.js</h3>
+                    <pre><code>import express from &#039;express&#039;;
+import Cliente from &#039;../models/clienteModel.js&#039;;
+
+const router = express.Router();
+
+// Crear Cliente
+router.post(&#039;/&#039;, async (req, res) =&gt; {
+    const { razon_social, nombre_comercial, direccion_entrega, telefono, email } = req.body;
+    try {
+        const newCliente = await Cliente.create({
+            razon_social,
+            nombre_comercial,
+            direccion_entrega,
+            telefono,
+            email,
+        });
+        res.status(201).json(newCliente);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Obtener todos los clientes
+router.get(&#039;/&#039;, async (req, res) =&gt; {
+    try {
+        const clientes = await Cliente.findAll();
+        res.status(200).json(clientes);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Obtener un cliente por ID
+router.get(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    try {
+        const cliente = await Cliente.findByPk(id);
+        if (!cliente) {
+            return res.status(404).json({ error: &#039;Cliente no encontrado&#039; });
+        }
+        res.status(200).json(cliente);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Actualizar un cliente por ID
+router.put(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    const { razon_social, nombre_comercial, direccion_entrega, telefono, email } = req.body;
+    try {
+        const cliente = await Cliente.findByPk(id);
+        if (!cliente) {
+            return res.status(404).json({ error: &#039;Cliente no encontrado&#039; });
+        }
+        await cliente.update({
+            razon_social,
+            nombre_comercial,
+            direccion_entrega,
+            telefono,
+            email,
+        });
+        res.status(200).json(cliente);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Eliminar un cliente por ID
+router.delete(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    try {
+        const cliente = await Cliente.findByPk(id);
+        if (!cliente) {
+            return res.status(404).json({ error: &#039;Cliente no encontrado&#039; });
+        }
+        await cliente.destroy();
+        res.status(204).json();
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+export default router;
+</code></pre>
+                </div>
+                <li><a href="#routes\estadoRoute.js">estadoRoute.js</a></li>
+
+                <div id="routes\estadoRoute.js">
+                    <h3>estadoRoute.js</h3>
+                    <pre><code>import express from &#039;express&#039;;
+import State from &#039;../models/estadoModel.js&#039;;
+
+const router = express.Router();
+
+// Crear un nuevo estado
+router.post(&#039;/&#039;, async (req, res) =&gt; {
+    const { nombre } = req.body;
+    try {
+        const newState = await State.create({ nombre });
+        res.status(201).json(newState);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Obtener todos los estados
+router.get(&#039;/&#039;, async (req, res) =&gt; {
+    try {
+        const states = await State.findAll();
+        res.status(200).json(states);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Obtener un estado por ID
+router.get(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    try {
+        const state = await State.findByPk(id);
+        if (!state) {
+            return res.status(404).json({ error: &#039;Estado no encontrado&#039; });
+        }
+        res.status(200).json(state);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Actualizar un estado por ID
+router.put(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    const { nombre } = req.body;
+    try {
+        const state = await State.findByPk(id);
+        if (!state) {
+            return res.status(404).json({ error: &#039;Estado no encontrado&#039; });
+        }
+        await state.update({ nombre });
+        res.status(200).json(state);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Eliminar un estado por ID
+router.delete(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    try {
+        const state = await State.findByPk(id);
+        if (!state) {
+            return res.status(404).json({ error: &#039;Estado no encontrado&#039; });
+        }
+        await state.destroy();
+        res.status(204).json();
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+export default router;
+</code></pre>
+                </div>
+                <li><a href="#routes\ordenDetalleRoute.js">ordenDetalleRoute.js</a></li>
+
+                <div id="routes\ordenDetalleRoute.js">
+                    <h3>ordenDetalleRoute.js</h3>
+                    <pre><code>import express from &#039;express&#039;;
+import OrderDetail from &#039;../models/ordenDetalleModel.js&#039;;
+import Order from &#039;../models/ordenModel.js&#039;;
+import Product from &#039;../models/productoModel.js&#039;;
+
+const router = express.Router();
+
+// Crear Detalle de Orden
+router.post(&#039;/&#039;, async (req, res) =&gt; {
+    const { orden_idOrden, Productos_idProductos, cantidad, precio, subtotal } = req.body;
+    try {
+        const order = await Order.findByPk(orden_idOrden);
+        const product = await Product.findByPk(Productos_idProductos);
+
+        if (!order || !product) {
+            return res.status(400).json({ error: &#039;Orden o producto no encontrado&#039; });
+        }
+
+        const newOrderDetail = await OrderDetail.create({
+            orden_idOrden,
+            Productos_idProductos,
+            cantidad,
+            precio,
+            subtotal
+        });
+        res.status(201).json(newOrderDetail);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Obtener todos los detalles de orden
+router.get(&#039;/&#039;, async (req, res) =&gt; {
+    try {
+        const orderDetails = await OrderDetail.findAll();
+        res.status(200).json(orderDetails);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Obtener detalle de orden por ID
+router.get(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    try {
+        const orderDetail = await OrderDetail.findByPk(id);
+        if (!orderDetail) {
+            return res.status(404).json({ error: &#039;Detalle de orden no encontrado&#039; });
+        }
+        res.status(200).json(orderDetail);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Actualizar detalle de orden por ID
+router.put(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    const { orden_idOrden, Productos_idProductos, cantidad, precio, subtotal } = req.body;
+
+    try {
+        const orderDetail = await OrderDetail.findByPk(id);
+        if (!orderDetail) {
+            return res.status(404).json({ error: &#039;Detalle de orden no encontrado&#039; });
+        }
+
+        await orderDetail.update({
+            orden_idOrden,
+            Productos_idProductos,
+            cantidad,
+            precio,
+            subtotal
+        });
+        res.status(200).json(orderDetail);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Eliminar detalle de orden por ID
+router.delete(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    try {
+        const orderDetail = await OrderDetail.findByPk(id);
+        if (!orderDetail) {
+            return res.status(404).json({ error: &#039;Detalle de orden no encontrado&#039; });
+        }
+        await orderDetail.destroy();
+        res.status(204).json();
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+export default router;
+</code></pre>
+                </div>
+                <li><a href="#routes\ordenRoute.js">ordenRoute.js</a></li>
+
+                <div id="routes\ordenRoute.js">
+                    <h3>ordenRoute.js</h3>
+                    <pre><code>import express from &#039;express&#039;;
+import Order from &#039;../models/ordenModel.js&#039;;
+import User from &#039;../models/usuarioModel.js&#039;;
+import State from &#039;../models/estadoModel.js&#039;;
+import sequelize from &#039;../config/db.js&#039;;  
+
+const router = express.Router();
+
+// Crear una nueva orden y llamar al procedimiento almacenado
+router.post(&#039;/&#039;, async (req, res) =&gt; {
+    const { nombre_usuario, nombre_estado, nombre_completo, direccion, telefono, correo_electronico, fecha_entrega, total_orden, detalles_json } = req.body;
+    try {
+        const usuario = await User.findOne({ where: { nombre_completo: nombre_usuario } });
+        const estado = await State.findOne({ where: { nombre: nombre_estado } });
+
+        if (!usuario || !estado) {
+            return res.status(400).json({ error: &#039;Usuario o estado no encontrado&#039; });
+        }
+
+        const newOrder = await Order.create({
+            usuarios_idUsuarios: usuario.idUsuarios,
+            estados_idEstados: estado.idEstados,
+            nombre_completo,
+            direccion,
+            telefono,
+            correo_electronico,
+            fecha_entrega,
+            total_orden,
+            detalles_json  // Almacenar el JSON de detalles
+        });
+
+        // Llamar al procedimiento almacenado
+        await sequelize.query(&#039;EXEC InsertarDetalleOrden :idOrden, :detalles_json&#039;, {
+            replacements: { idOrden: newOrder.idOrden, detalles_json }
+        });
+
+        res.status(201).json(newOrder);
+    } catch (error) {
+        console.error(&#039;Error al crear la orden:&#039;, error);
+        res.status(400).json({ error: error.message || &#039;Se produjo un error al crear la orden&#039; });
+    }
+});
+
+// Obtener todas las órdenes
+router.get(&#039;/&#039;, async (req, res) =&gt; {
+    try {
+        const orders = await Order.findAll();
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Obtener una orden por ID
+router.get(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    try {
+        const order = await Order.findByPk(id);
+        if (!order) {
+            return res.status(404).json({ error: &#039;Orden no encontrada&#039; });
+        }
+        res.status(200).json(order);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Actualizar una orden por ID
+router.put(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    const { nombre_usuario, nombre_estado, nombre_completo, direccion, telefono, correo_electronico, fecha_entrega, total_orden, detalles_json } = req.body;
+
+    try {
+        const usuario = await User.findOne({ where: { nombre_completo: nombre_usuario } });
+        const estado = await State.findOne({ where: { nombre: nombre_estado } });
+
+        if (!usuario || !estado) {
+            return res.status(400).json({ error: &#039;Usuario o estado no encontrado&#039; });
+        }
+
+        const order = await Order.findByPk(id);
+        if (!order) {
+            return res.status(404).json({ error: &#039;Orden no encontrada&#039; });
+        }
+
+        await order.update({
+            usuarios_idUsuarios: usuario.idUsuarios,
+            estados_idEstados: estado.idEstados,
+            nombre_completo,
+            direccion,
+            telefono,
+            correo_electronico,
+            fecha_entrega,
+            total_orden,
+            detalles_json  // Actualizar el JSON de detalles
+        });
+        res.status(200).json(order);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Inactivar una orden por ID
+router.put(&#039;/:id/inactivar&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    try {
+        const order = await Order.findByPk(id);
+        if (!order) {
+            return res.status(404).json({ error: &#039;Orden no encontrada&#039; });
+        }
+        await order.update({ activo: false });
+        res.status(200).json({ message: &#039;Orden inactivada exitosamente&#039; });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+export default router;
+</code></pre>
+                </div>
+                <li><a href="#routes\productoRoute.js">productoRoute.js</a></li>
+
+                <div id="routes\productoRoute.js">
+                    <h3>productoRoute.js</h3>
+                    <pre><code>import express from &#039;express&#039;;
+import Product from &#039;../models/productoModel.js&#039;;
+import User from &#039;../models/usuarioModel.js&#039;;
+import Category from &#039;../models/categoriaModel.js&#039;;
+import State from &#039;../models/estadoModel.js&#039;;
+
+const router = express.Router();
+
+// Create
+router.post(&#039;/&#039;, async (req, res) =&gt; {
+    const { nombre_usuario, nombre_categoria, nombre, marca, codigo, stock, nombre_estado, precio, foto } = req.body;
+    try {
+        const usuario = await User.findOne({ where: { nombre_completo: nombre_usuario } });
+        const categoria = await Category.findOne({ where: { nombre: nombre_categoria } });
+        const estado = await State.findOne({ where: { nombre: nombre_estado } });
+
+        if (!usuario || !categoria || !estado) {
+            return res.status(400).json({ error: &#039;Usuario, Categoría o estado no encontrados&#039; });
+        }
+
+        const newProducto = await Product.create({
+            categoriaProductos_idCategoriaProductos: categoria.idCategoriaProductos,
+            usuarios_idUsuarios: usuario.idUsuarios,
+            nombre,
+            marca,
+            codigo,
+            stock,
+            estados_idEstados: estado.idEstados,
+            precio,
+            foto,
+        });
+        res.status(201).json(newProducto);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Obtener todos los productos 
+router.get(&#039;/&#039;, async (req, res) =&gt; {
+    try {
+        const products = await Product.findAll();
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Obtener por nombre o por código
+router.get(&#039;/search&#039;, async (req, res) =&gt; {
+    const { nombre, codigo } = req.query;
+    try {
+        let product;
+        if (nombre) {
+            product = await Product.findOne({ where: { nombre } });
+        } else if (codigo) {
+            product = await Product.findOne({ where: { codigo } });
+        }
+        if (!product) {
+            return res.status(404).json({ error: &#039;Producto no encontrado&#039; });
+        }
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Actualizar
+router.put(&#039;/:id&#039;, async (req, res) =&gt; {
+    const { id } = req.params;
+    const { nombre_usuario, nombre_categoria, nombre, marca, codigo, stock, nombre_estado, precio, foto } = req.body;
+
+    try {
+        const usuario = await User.findOne({ where: { nombre_completo: nombre_usuario } });
+        const categoria = await Category.findOne({ where: { nombre: nombre_categoria } });
+        const estado = await State.findOne({ where: { nombre: nombre_estado } });
+
+        if (!usuario || !categoria || !estado) {
+            return res.status(400).json({ error: &#039;Usuario, categoría o estado no encontrados&#039; });
+        }
+
+        const product = await Product.findByPk(id);
+        if (!product) {
+            return res.status(404).json({ error: &#039;Producto no encontrado&#039; });
+        }
+
+        await product.update({
+            categoriaProductos_idCategoriaProductos: categoria.idCategoriaProductos,
+            usuarios_idUsuarios: usuario.idUsuarios,
+            nombre,
+            marca,
+            codigo,
+            stock,
+            estados_idEstados: estado.idEstados,
+            precio,
+            foto: foto || null,
+        });
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+//Inactivar Producto
+router.put(&#039;/:id/inactivar&#039;, async (req, res) =&gt; { 
+    const { id } = req.params; const { idEstado } = req.body; 
+    try { 
+        await sequelize.query(&#039;EXEC InactivarProducto :p_idEstado, :p_idProducto&#039;, { 
+            replacements: { 
+                p_idEstado: idEstado, p_idProducto: id 
+            } 
+        }); 
+        res.status(200).json({ message: &#039;Producto inactivado exitosamente&#039; }); 
+    } catch (error) { res.status(400).json({ error: error.message }); } }); 
+
+///////
+export default router;
+</code></pre>
+                </div>
+                <li><a href="#routes\usuarioRoute.js">usuarioRoute.js</a></li>
+
+                <div id="routes\usuarioRoute.js">
+                    <h3>usuarioRoute.js</h3>
+                    <pre><code>import express from &#039;express&#039;;
+import bcrypt from &#039;bcrypt&#039;;
+import jwt from &#039;jsonwebtoken&#039;;
+import User from &#039;../models/usuarioModel.js&#039;;
+import authMiddleware from &#039;../middlewares/authMiddleware.js&#039;
+
+const router = express.Router();
+const secretKey = &#039;your_secret_key&#039;;
+
+// Registro de usuario
+router.post(&#039;/register&#039;, async (req, res) =&gt; {
+    const { correo_electronico, nombre_completo, password, telefono, fecha_nacimiento } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    try {
+        const newUser = await User.create({
+            correo_electronico,
+            nombre_completo,
+            password: hashedPassword,
+            telefono,
+            fecha_nacimiento,
+        });
+        res.status(201).json(newUser);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Inicio de sesión de usuario
+router.post(&#039;/login&#039;, async (req, res) =&gt; {
+    const { correo_electronico, password } = req.body;
+    try {
+        const user = await User.findOne({ where: { correo_electronico } });
+        if (!user) {
+            return res.status(401).json({ error: &#039;Usuario no encontrado&#039; });
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+            return res.status(401).json({ error: &#039;Contraseña incorrecta&#039; });
+        }
+
+        const token = jwt.sign({ userId: user.idUsuarios }, secretKey, { expiresIn: &#039;24h&#039; });
+        res.status(200).json({ token });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Ruta protegida 
+router.get(&#039;/protected-route&#039;, authMiddleware, (req, res) =&gt; {
+     res.status(200).json({ message: &#039;Ruta protegida accedida con éxito&#039; }); 
+    });
+
+export default router;
+</code></pre>
+                </div>
+                </ul>
 </ul>
 
 </body>
