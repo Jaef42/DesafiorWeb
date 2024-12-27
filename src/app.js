@@ -31,3 +31,5 @@ app.listen(PORT, async () => {
     }
     console.log(`Servidor ejecutándose en el puerto ${PORT}`);
 });
+
+document.addEventListener('DOMContentLoaded', () => { const mensaje = document.getElementById('mensaje'); mensaje.textContent = 'Bienvenido a mi proyecto JavaScript en GitHub Pages!'; });
